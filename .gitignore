@@ -1,0 +1,8 @@
+target/
+.idea/
+logs/
+.project
+.classpath
+/bin/
+LICENSE
+noumena-java-sdk-api.iml
