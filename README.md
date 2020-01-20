@@ -1,7 +1,7 @@
 
 English | [中文](README_CN.md)
 
-# noumena-OpenAPI 
+# Custodian-OpenAPI 
 
 
 
@@ -47,10 +47,10 @@ The institution first needs to apply for the API `key` and API `secret` that wil
    - Complete request path, including the `URL` parameters: request URI
    - If there is a request `body`, the post conversion `string` of the `body` also needs to be added: string representation of the request payload
 2. Client side generates the signature using `HMAC_SHA256` based on the data and API secret
-3. Set the Authorization header based on the fixed sequence, i.e. the key is `Authorization`, and the value is: Noumena:ApiKey:request time stamp:signature (linked using colon) 
+3. Set the Authorization header based on the fixed sequence, i.e. the key is `Authorization`, and the value is: ApiKey:request time stamp:signature (linked using colon) 
 4. If the server side sets a password when creating the API key and secret, then an Access-Passphrase header needs to be set, i.e., the `key` is `Access-Passphrase`, and the `value` is the password.
 5. Client side sends the data, Authorization header, and the Access-Passphrase header (in case there is a fourth step) to the server side, i.e., the final http header sent is as follows:
-   - Authorization：Noumena:ApiKey:request timestamp:signature
+   - Authorization：ApiKey:request timestamp:signature
    - Access-Passphrase：Your API Secret passphrase
 
 
@@ -77,12 +77,12 @@ amount=190&ont_id=did:ont:Ae9ujqUnAtH9yRiepRvLUE3t9R2NbCTZPG&to_address=AUol16gh
 **Example**
 
 ```
-origin sign data:{}1579185795117GET14db63d7f3614664ad1c71dd134a21dc/api/v1/customers/accounts?page_num=1&page_size=20
+origin sign data:1579506853639GET/v1/api/account2917395a08a443778bb65452998c9af8
 
-Request Url:https://uat.noumena.pro/api/v1/customers/accounts?page_num=1&page_size=20
-Authorization:Noumena:14db63d7f3614664ad1c71dd134a21dc:1579185795117:5pVj45P4c+Q8LbGCZgS05WDq9b8/fpAKCDl6drmViW4=
-Access-Passphrase:12345678a
+https://preopenapi.safeoncustodian.com/v1/api/account
+Authorization:2917395a08a443778bb65452998c9af8:1579506261997:4SvqRiIUJUSSWRLSeYjBxI4L9T6Mgs21IpieQ8JlEkM=
+Access-Passphrase:11111111
 
-{"code":0,"msg":"SUCCESS","result":{"total":7,"records":[{"acct_no":"3206","status":1,"create_time":1579159626000},{"acct_no":"3205","status":1,"create_time":1579159314000},{"acct_no":"3203","status":1,"create_time":1579158803000},{"acct_no":"3202","status":1,"create_time":1579158608000},{"acct_no":"3201","status":1,"create_time":1579157747000},{"acct_no":"acct-zzx","status":1,"create_time":1579144759000},{"acct_no":"acct-zzx3","status":1,"create_time":1579143521000}]}}
+{"code":0,"msg":"SUCCESS","result":[{"address":"tb1q07r35czmvuhl28r93qgv02h6t030gcheqd34rs","address_name":"Hot-Wallet-16-BTC","coin_unique_name":"BTC","coin_symbol":"BTC","coin_full_name":"Bitcoin","coin_decimal":8,"deposit_allowed":1,"is_withdrawal_allowed":1,"current_balance":"0.084800000000000000","fee_coin":"BTC","estimated_fee":"0.0001","upper_limit":"10.000000000000000000","lower_limit":"0.010000000000000000"},{"address":"0xa2784b0a79d21fe733d0006bf7facc6ada85f451","address_name":"Hot-Wallet-16-ETH","coin_unique_name":"ETH","coin_symbol":"ETH","coin_full_name":"Ethereum","coin_decimal":18,"deposit_allowed":1,"is_withdrawal_allowed":1,"current_balance":"4.262480000000014912","fee_coin":"ETH","estimated_fee":"0.001","upper_limit":"5.000000000000000000","lower_limit":"1.000000000000000000"},{"address":"0xa2784b0a79d21fe733d0006bf7facc6ada85f451","address_name":"Hot-Wallet-16-ETH","coin_unique_name":"USDT-ERC20","coin_symbol":"USDT-ERC20","coin_full_name":"Ethereum","coin_decimal":6,"deposit_allowed":1,"is_withdrawal_allowed":1,"current_balance":"1895.000000000000000000","fee_coin":"ETH","estimated_fee":"0.001","upper_limit":"900.000000000000000000","lower_limit":"200.000000000000000000"}]}
 
 ```

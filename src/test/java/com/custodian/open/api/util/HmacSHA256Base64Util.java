@@ -23,7 +23,7 @@ public class HmacSHA256Base64Util {
             throw new Exception("secretKey error");
         }
         String preHash = preHash(timestamp, method, requestPath, queryString, appKey, body);
-        System.out.println("origin sign data:{}"+preHash);
+        System.out.println("origin sign data:"+preHash);
         byte[] secretKeyBytes = secretKey.getBytes(CharsetEnum.UTF_8.charset());
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKeyBytes,"HmacSHA256");
         Mac mac = (Mac) MAC.clone();
