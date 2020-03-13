@@ -1,11 +1,15 @@
 package com.custodian.open.api.test;
 
+import com.alibaba.fastjson.JSONObject;
+import com.custodian.open.api.dto.SetHdAddressReq;
 import com.custodian.open.api.util.HmacSHA256Base64Util;
 import okhttp3.*;
 import org.junit.Test;
 
+import java.util.TreeMap;
 
-public class HmacTest {
+
+public class ModifyHdAddressTest {
 
     String host = "https://preopenapi.safeoncustodian.com";
     private static final String apiKey = "2917395a08a443778bb65452998c9af8";
@@ -15,13 +19,19 @@ public class HmacTest {
 
 
     @Test
-    public void getCustomersAccountsTest() throws Exception {
+    public void modifyHdAddress() throws Exception {
+        String masterAddress = "0x722285bc7c18c43618454e2fa82f8db0cee21847";
         String timeStampStr = String.valueOf(System.currentTimeMillis());
-        String method = "GET";
-        String requestPath = "/v1/api/account";
+        String method = "PUT";
+        String requestPath = "/v1/api/hd-address";
         String requestQueryStr = "";
 
-        String sign = HmacSHA256Base64Util.sign(timeStampStr, method, requestPath,  requestQueryStr, apiKey, apiSecret, null);
+        SetHdAddressReq req = new SetHdAddressReq();
+
+        req.setAddress(masterAddress);
+        req.setRemark("1111111111111");
+        TreeMap<String,String> map = JSONObject.parseObject(req.toString(),TreeMap.class);
+        String sign = HmacSHA256Base64Util.sign(timeStampStr, method, requestPath,  requestQueryStr, apiKey, apiSecret, map);
 
         String authorizationStr = String.format("%s:%s:%s",apiKey,timeStampStr,sign);
 
@@ -30,9 +40,11 @@ public class HmacTest {
         System.out.println("Access-Passphrase:"+apiPassphrase);
 
         OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, JSONObject.toJSONString(req));
         Request request = new Request.Builder()
                 .url(host+requestPath)
-                .get()
+                .put(body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("AUTHORIZATION",authorizationStr)
                 .addHeader("CUSTODIAN-ACCESS-PASSPHRASE",apiPassphrase)
