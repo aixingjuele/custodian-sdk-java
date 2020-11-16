@@ -1,7 +1,8 @@
 package com.custodian.open.api.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.custodian.open.api.dto.AddHdAddressReq;
+import com.custodian.open.api.dto.WithdrawReq;
+import com.custodian.open.api.enums.CoinTypeEnum;
 import com.custodian.open.api.util.HmacSHA256Base64Util;
 import okhttp3.*;
 import org.junit.Test;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 
-public class CreateHdAddressTest {
+public class WithdrawTest {
 
     String host = "https://preopenapi.safeoncustodian.com";
     private static final String apiKey = "2917395a08a443778bb65452998c9af8";
@@ -21,22 +22,22 @@ public class CreateHdAddressTest {
 
 
     @Test
-    public void createHdAddress() throws Exception {
-        String masterAddress = "0xa2784b0a79d21fe733d0006bf7facc6ada85f451";
+    public void withdraw() throws Exception {
         String timeStampStr = String.valueOf(System.currentTimeMillis());
         String method = "POST";
-        String requestPath = "/v1/api/hd-address";
+        String requestPath = "/v1/api/trans/withdrawal";
         String requestQueryStr = "";
 
-        AddHdAddressReq req = new AddHdAddressReq();
+        WithdrawReq req = new WithdrawReq();
 
-        req.setAddress(masterAddress);
-        req.setCount(2);
 
-        List<String> remarks = new ArrayList<String>();
-        remarks.add("testhd1");
-        remarks.add("testhd2");
-        req.setRemarks(remarks);
+        req.setRequest_id("test_txid-001");
+        req.setCoin_type(CoinTypeEnum.ETH.value());
+        req.setTo_address("0x2445Ef446edD1D949F9E958C86806ADF3BC82B7a");
+        req.setTx_amount("0.001");
+        req.setNote("test");
+
+
         TreeMap<String,String> map = JSONObject.parseObject(req.toString(),TreeMap.class);
         String sign = HmacSHA256Base64Util.sign(timeStampStr, method, requestPath,  requestQueryStr, apiKey, apiSecret, map);
 

@@ -4,9 +4,9 @@ package com.custodian.open.api.enums;
 public enum CoinTypeEnum {
 
 
-    USDT("USDT"),
-    PAX("PAX"),
-    ONT("ONT"),
+    USDT("USDT-ERC20"),
+    ETH("ETH"),
+    BTC("BTC"),
     ;
 
 
