@@ -34,7 +34,7 @@ public class WithdrawTest {
         req.setRequest_id("test_txid-001");
         req.setCoin_type(CoinTypeEnum.ETH.value());
         req.setTo_address("0x2445Ef446edD1D949F9E958C86806ADF3BC82B7a");
-        req.setTx_amount("0.001");
+        req.setTx_amount("0.0001");
         req.setNote("test");
 
 

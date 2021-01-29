@@ -2,6 +2,7 @@ package com.custodian.open.api.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.custodian.open.api.dto.AddHdAddressReq;
+import com.custodian.open.api.enums.Constant;
 import com.custodian.open.api.util.HmacSHA256Base64Util;
 import okhttp3.*;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 
 public class CreateHdAddressTest {
@@ -22,7 +24,9 @@ public class CreateHdAddressTest {
 
     @Test
     public void createHdAddress() throws Exception {
-        String masterAddress = "0xa2784b0a79d21fe733d0006bf7facc6ada85f451";
+//        String masterAddress = "0xa2784b0a79d21fe733d0006bf7facc6ada85f451";
+
+        String masterAddress = "tb1q07r35czmvuhl28r93qgv02h6t030gcheqd34rs";
         String timeStampStr = String.valueOf(System.currentTimeMillis());
         String method = "POST";
         String requestPath = "/v1/api/hd-address";
@@ -31,11 +35,14 @@ public class CreateHdAddressTest {
         AddHdAddressReq req = new AddHdAddressReq();
 
         req.setAddress(masterAddress);
-        req.setCount(2);
+        req.setCount(5);
 
         List<String> remarks = new ArrayList<String>();
         remarks.add("testhd1");
         remarks.add("testhd2");
+        remarks.add("testhd3");
+        remarks.add("testhd4");
+        remarks.add("testhd5");
         req.setRemarks(remarks);
         TreeMap<String,String> map = JSONObject.parseObject(req.toString(),TreeMap.class);
         String sign = HmacSHA256Base64Util.sign(timeStampStr, method, requestPath,  requestQueryStr, apiKey, apiSecret, map);
@@ -46,7 +53,10 @@ public class CreateHdAddressTest {
         System.out.println("Authorization:"+authorizationStr);
         System.out.println("Access-Passphrase:"+apiPassphrase);
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder().connectTimeout(Constant.CONNECT_TIMEOUT, TimeUnit.SECONDS) //连接超时
+                .readTimeout(Constant.READ_TIMEOUT, TimeUnit.SECONDS) //读取超时
+                .writeTimeout(Constant.WRITE_TIMEOUT, TimeUnit.SECONDS).build();
+
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, JSONObject.toJSONString(req));
         Request request = new Request.Builder()
