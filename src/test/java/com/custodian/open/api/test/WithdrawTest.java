@@ -34,7 +34,7 @@ public class WithdrawTest {
         req.setRequest_id("test_txid-001");
         req.setCoin_type(CoinTypeEnum.ETH.value());
         req.setTo_address("0x2445Ef446edD1D949F9E958C86806ADF3BC82B7a");
-        req.setTx_amount("0.0001");
+        req.setTx_amount("0.001");
         req.setNote("test");
 
 
@@ -57,6 +57,42 @@ public class WithdrawTest {
                 .addHeader("AUTHORIZATION",authorizationStr)
                 .addHeader("CUSTODIAN-ACCESS-PASSPHRASE",apiPassphrase)
                 .build();
+        Response response = client.newCall(request).execute();
+        //System.out.println("result="+response.isSuccessful());
+        System.out.println();
+        if (response.isSuccessful()) {
+            System.out.println(response.body().string());
+        }else{
+            System.out.println("error... " + response.body().string());
+        }
+    }
+
+
+    @Test
+    public void getWithdraw() throws Exception {
+        String timeStampStr = String.valueOf(System.currentTimeMillis());
+        String method = "GET";
+        String requestPath = "/v1/api/trans/20201116112401303019";
+        String requestQueryStr = "";
+
+
+        String sign = HmacSHA256Base64Util.sign(timeStampStr, method, requestPath,  requestQueryStr, apiKey, apiSecret, null);
+
+        String authorizationStr = String.format("%s:%s:%s",apiKey,timeStampStr,sign);
+
+        System.out.println("Request Url:"+ host+requestPath+"?"+requestQueryStr );
+        System.out.println("Authorization:"+authorizationStr);
+        System.out.println("Access-Passphrase:"+apiPassphrase);
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(host+requestPath)
+                .get()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("AUTHORIZATION",authorizationStr)
+                .addHeader("CUSTODIAN-ACCESS-PASSPHRASE",apiPassphrase)
+                .build();
+
         Response response = client.newCall(request).execute();
         //System.out.println("result="+response.isSuccessful());
         System.out.println();
